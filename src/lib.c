@@ -53,7 +53,7 @@ void display_help() {
 
 void display_output(int file_no, char *truncated_file_name, double size) {
 
-    printf("FILE NO.%d -> %s\n", file_no, truncated_file_name);
+    printf("\nFILE NO.%d -> %s\n", file_no, truncated_file_name);
     if (size <= BYTES_IN_KIB) {
         printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
     } else if (size <= BYTES_IN_MIB) {

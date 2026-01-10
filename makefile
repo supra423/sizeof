@@ -6,9 +6,9 @@ BIN_DIR := bin
 CC := gcc
 CFLAGS := -Iinclude -Wall -Wextra -g
 LDFLAGS := 
-# CFLAGS := -march=native -Iinclude -Wall -Wextra -O2 -fomit-frame-pointer \
-# 		  -fno-plt -pipe -mtune=native
-# CFLAGS := -O2 -Wall -Wextra -pipe
+# CFLAGS := -Iinclude -march=native -Wall -Wextra -O2 -fomit-frame-pointer \
+# 	   -fno-plt -pipe -mtune=native
+# CFLAGS := -Iinclude -O2 -Wall -Wextra -pipe
 
 # PKG_CFLAGS := $(shell pkg-config --cflags libfoo)
 # PKG_LIBS := $(shell pkg-config --libs libfoo)

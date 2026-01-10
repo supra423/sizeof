@@ -6,14 +6,25 @@
 #include <unistd.h>
 
 int process_args(int argc, char *argv[]) {
+    if (argc == 1) {
+        display_help();
+        return 0;
+    }
     for (int i = 1; i < argc; i++) {
-        if (argv[i] == NULL || strcmp(argv[i], "--help") == 0 ||
-            strcmp(argv[i], "-h") == 0 || argc == 1) {
-            display_help();
-            return 0;
+        if (*argv[i] == '-') {
+            // if argument is prefixed with '-' it might be an option
+            if (argv[i] == NULL || strcmp(argv[i], "--help") == 0 ||
+                strcmp(argv[i], "-h") == 0) {
+                display_help();
+                return 0;
+            } else {
+                printf("\"%s\" option doesn't exist, check for typos!\n",
+                       argv[i]);
+                return -1;
+            }
         }
+
         char *file_name = {argv[i]};
-        printf("\n");
 
         // stat struct contains info about the file like size, file type, etc.
         struct stat buf;
@@ -25,12 +36,12 @@ int process_args(int argc, char *argv[]) {
         }
 
         if (S_ISDIR(buf.st_mode)) {
-            printf("File type is a directory! Cannot calculate size\n");
+            printf("\"%s\" is a directory! Cannot calculate size\n", file_name);
             continue;
         }
 
         if (!S_ISREG(buf.st_mode)) {
-            printf("File type not recognized!\n");
+            printf("File: \"%s\" file type is not recognized!\n", file_name);
             continue;
         }
 
