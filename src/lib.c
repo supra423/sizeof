@@ -40,26 +40,35 @@ char *truncate_file_name(char filename[]) {
 }
 
 void display_help() {
-    printf("\nChecks logical file size in Bytes, KiB, MiB, and GiB\n");
-    printf("Amount of varying units depends on file size\n");
-    printf("If file size is greater than 1 MiB, it should output size in: "
-           "B, KiB, and MiB\n");
-    printf("But if file size is only lesser than 1 KiB, it should only "
-           "output size in Bytes\n");
-    printf("This program can accept multiple files as arguments\n\n");
-    printf("Example usage: \n\n");
-    printf("$ sizeof foo.h dir/bar.c\n\n");
-    printf("OUTPUT:\n\n");
-    printf("FILE NO.1 -> foo.h\n");
-    printf("foo.h IN BYTES: 123B\n\n");
-    printf("FILE NO.2 -> bar.c\n");
-    printf("dir/bar.c IN BYTES: 1234B\n");
-    printf("dir/bar.c IN KiB: 1.23KiB\n");
-    printf("\n\"--help / -h\" - to display this message\n");
+    printf(
+        "\nChecks logical file size in Bytes, KiB, MiB, and GiB\n"
+        "Amount of varying units depends on file size\n"
+        "If file size is greater than 1 MiB, it should output size in:\n"
+        "B, KiB, and MiB\n"
+        "but if file size is only lesser than 1 KiB, it should only\n"
+        "output size in Bytes.\n"
+        "This program can accept multiple files as arguments.\n\n"
+        "Example usage: \n\n"
+        "$ sizeof foo.h dir/bar.c\n\n"
+        "OUTPUT:\n\n"
+        "FILE: foo.h\n"
+        "foo.h IN BYTES: 123B\n\n"
+        "FILE: dir/bar.c\n"
+        "dir/bar.c IN BYTES: 1234B\n"
+        "dir/bar.c IN KiB: 1.23KiB\n\n"
+        "OPTIONS:\n"
+        "\n\"--help / -h\" - to display this message\n"
+        "\n\"--truncate-filename / -tf\" - to truncate file name, e.g.,\n"
+        "\t\"dir/bar.c\" to \"bar.c\" only.\n\n"
+        "WARNING:\n\nMake sure that the arguments you enter that are\n"
+        "intended to be used as a file name or path don't start with: '-'\n"
+        "the program will misinterpret it as an option. It's pretty unlikely\n"
+        "to happen though because who the hell names files/directories\n"
+        "prefixed with a '-'.\n");
 }
 
-void display_output(int file_no, char *truncated_file_name, double size) {
-    printf("\nFILE NO.%d -> %s\n", file_no, truncated_file_name);
+void display_output(char *truncated_file_name, double size) {
+    printf("\nFILE: %s\n", truncated_file_name);
     if (size <= BYTES_IN_KIB) {
         printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
     } else if (size <= BYTES_IN_MIB) {
