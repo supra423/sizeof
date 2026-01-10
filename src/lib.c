@@ -42,12 +42,10 @@ void display_help() {
     printf("$ sizeof foo.h dir/bar.c\n\n");
     printf("OUTPUT:\n\n");
     printf("FILE NO.1 -> foo.h\n");
-    printf("foo.h IN BYTES: 1234.00B\n");
-    printf("foo.h IN KiB: 1.23KiB\n\n");
-    printf("FILE NO.2 -> dir/bar.c\n");
-    printf("dir/bar.c IN BYTES: 1234.00B\n");
+    printf("foo.h IN BYTES: 123B\n\n");
+    printf("FILE NO.2 -> bar.c\n");
+    printf("dir/bar.c IN BYTES: 1234B\n");
     printf("dir/bar.c IN KiB: 1.23KiB\n");
-
     printf("\n\"--help / -h\" - to display this message\n");
 }
 
