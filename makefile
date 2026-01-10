@@ -4,9 +4,9 @@ OBJ_DIR := obj
 BIN_DIR := bin
 
 CC := gcc
-CFLAGS := -Iinclude -Wall -Wextra -g
+# CFLAGS := -Iinclude -Wall -Wextra -g
 LDFLAGS := 
-# CFLAGS := -Iinclude -march=native -Wall -Wextra -O2 -fomit-frame-pointer \
+CFLAGS := -Iinclude -march=native -Wall -Wextra -O2 -fomit-frame-pointer \
 	   -fno-plt -pipe -mtune=native
 # CFLAGS := -Iinclude -O2 -Wall -Wextra -pipe
 

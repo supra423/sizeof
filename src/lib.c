@@ -63,21 +63,21 @@ void display_output(int file_no, char *truncated_file_name, double size) {
     if (size <= BYTES_IN_KIB) {
         printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
     } else if (size <= BYTES_IN_MIB) {
-        const double size_in_kib = size / TO_KIB;
+        const double size_in_kib = size / BYTES_IN_KIB;
 
         printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
         printf("%s IN KiB: %.2fKiB\n", truncated_file_name, size_in_kib);
     } else if (size <= BYTES_IN_GIB) {
-        const double size_in_kib = size / TO_KIB;
-        const double size_in_mib = size / TO_MIB;
+        const double size_in_kib = size / BYTES_IN_KIB;
+        const double size_in_mib = size / BYTES_IN_MIB;
 
         printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
         printf("%s IN KiB: %.2fKiB\n", truncated_file_name, size_in_kib);
         printf("%s IN MiB: %.2fMiB\n", truncated_file_name, size_in_mib);
     } else {
-        const double size_in_kib = size / TO_KIB;
-        const double size_in_mib = size / TO_MIB;
-        const double size_in_gib = size / TO_GIB;
+        const double size_in_kib = size / BYTES_IN_KIB;
+        const double size_in_mib = size / BYTES_IN_MIB;
+        const double size_in_gib = size / BYTES_IN_GIB;
 
         printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
         printf("%s IN KiB: %.2fKiB\n", truncated_file_name, size_in_kib);
