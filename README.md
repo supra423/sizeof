@@ -8,12 +8,17 @@ depending on the size of the file, like this:
 
 ```bash
 $ sizeof foo.h dir/bar.c
-FILE NO.1 -> foo.h
+FILE: foo.h
 foo.h IN BYTES: 123B
 
-FILE NO.2 -> bar.c
+FILE: dir/bar.c
 dir/bar.c IN BYTES: 1234B
 dir/bar.c IN KiB: 1.23KiB
+```
+
+For more info, enter:
+```bash 
+$ sizeof --help
 ```
 
 The makefile compiles the program with debug flags by default, uncomment the
