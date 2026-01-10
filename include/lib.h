@@ -11,6 +11,6 @@ void display_help();
 // is lesser than a KiB, it should only display size in bytes, or if
 // the file size is greater than a GiB, it should display all sizes in
 // bytes, KiB, MiB, GiB
-void display_output(char *truncated_file_name, double size);
+void display_output(char *final_file_name, double size);
 
 #endif

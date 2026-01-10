@@ -67,30 +67,35 @@ void display_help() {
         "prefixed with a '-'.\n");
 }
 
-void display_output(char *truncated_file_name, double size) {
-    printf("\nFILE: %s\n", truncated_file_name);
+void display_output(char *final_file_name, double size) {
+    printf("\nFILE: %s\n", final_file_name);
     if (size <= BYTES_IN_KIB) {
-        printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
+        printf("%s IN BYTES: %.0fB\n", final_file_name, size);
     } else if (size <= BYTES_IN_MIB) {
         const double size_in_kib = size / BYTES_IN_KIB;
 
-        printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
-        printf("%s IN KiB: %.2fKiB\n", truncated_file_name, size_in_kib);
+        printf("%s IN BYTES: %.0fB\n"
+               "%s IN KiB: %.2fKiB\n",
+               final_file_name, size, final_file_name, size_in_kib);
     } else if (size <= BYTES_IN_GIB) {
         const double size_in_kib = size / BYTES_IN_KIB;
         const double size_in_mib = size / BYTES_IN_MIB;
 
-        printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
-        printf("%s IN KiB: %.2fKiB\n", truncated_file_name, size_in_kib);
-        printf("%s IN MiB: %.2fMiB\n", truncated_file_name, size_in_mib);
+        printf("%s IN BYTES: %.0fB\n"
+               "%s IN KiB: %.2fKiB\n"
+               "%s IN MiB: %.2fMiB\n",
+               final_file_name, size, final_file_name, size_in_kib,
+               final_file_name, size_in_mib);
     } else {
         const double size_in_kib = size / BYTES_IN_KIB;
         const double size_in_mib = size / BYTES_IN_MIB;
         const double size_in_gib = size / BYTES_IN_GIB;
 
-        printf("%s IN BYTES: %.0fB\n", truncated_file_name, size);
-        printf("%s IN KiB: %.2fKiB\n", truncated_file_name, size_in_kib);
-        printf("%s IN MiB: %.2fMiB\n", truncated_file_name, size_in_mib);
-        printf("%s IN GiB: %.2fGiB\n", truncated_file_name, size_in_gib);
+        printf("%s IN BYTES: %.0fB\n"
+               "%s IN KiB: %.2fKiB\n"
+               "%s IN MiB: %.2fMiB\n"
+               "%s IN GiB: %.2fGiB\n",
+               final_file_name, size, final_file_name, size_in_kib,
+               final_file_name, size_in_mib, final_file_name, size_in_gib);
     }
 }
