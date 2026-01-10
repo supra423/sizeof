@@ -7,7 +7,7 @@ CC := gcc
 CFLAGS := -Iinclude -Wall -Wextra -g
 LDFLAGS := 
 # CFLAGS := -Iinclude -march=native -Wall -Wextra -O2 -fomit-frame-pointer \
-# 	   -fno-plt -pipe -mtune=native
+	   -fno-plt -pipe -mtune=native
 # CFLAGS := -Iinclude -O2 -Wall -Wextra -pipe
 
 # PKG_CFLAGS := $(shell pkg-config --cflags libfoo)
