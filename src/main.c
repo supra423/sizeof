@@ -1,4 +1,5 @@
 #include "lib.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,8 +51,16 @@ int process_args(int argc, char *argv[]) {
 
         if (size != -1) {
             char *truncated_file_name = truncate_file_name(file_name);
+            int is_mallocd = true;
+            if (truncated_file_name == NULL) {
+                truncated_file_name = file_name;
+                is_mallocd = false;
+            }
             display_output(i, truncated_file_name, size);
-            free(truncated_file_name);
+
+            if (is_mallocd) {
+                free(truncated_file_name);
+            }
         }
     }
     return 0; // not sure if this is necessary, I just wanna omit the warning

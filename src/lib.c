@@ -1,13 +1,22 @@
 #include "constants.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 
 char *truncate_file_name(char filename[]) {
     int c = 0;
+    bool contains_dir = false;
     while (filename[c] != '\0') {
         c++;
+        if (filename[c] == '/' && !contains_dir) {
+            contains_dir = true;
+        }
     } // after this, filename[c] should point at the last char of filename
+
+    if (!contains_dir) {
+        return NULL;
+    }
 
     while (filename[c] != '/') {
         // find the last occurence of '/' by backtracking
