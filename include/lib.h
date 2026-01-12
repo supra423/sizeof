@@ -5,8 +5,6 @@
 // e.g., "src/main.c", the function should return "main.c"
 char *truncate_file_name(char filename[]);
 
-void display_help();
-
 // displays varying output depending on file size, if file size
 // is lesser than a KiB, it should only display size in bytes, or if
 // the file size is greater than a GiB, it should display all sizes in

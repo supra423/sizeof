@@ -1,3 +1,4 @@
+#include "constants.h"
 #include "lib.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -7,13 +8,14 @@
 #include <unistd.h>
 
 static bool truncate_flag = false;
+int b[5];
 
 void evaluate_options(char *argv[], int i) {
 	if (*argv[i] == '-') {
 		// if argument is prefixed with '-' it might be an option
 		if (argv[i] == NULL || strcmp(argv[i], "--help") == 0 ||
 			strcmp(argv[i], "-h") == 0) {
-			display_help();
+			HELP();
 			exit(0);
 		} else if (strcmp(argv[i], "--truncate-filename") == 0 ||
 				   strcmp(argv[i], "-tf") == 0) {
@@ -59,7 +61,7 @@ void process_output(char *file_name, double size) {
 
 int process_args(int argc, char *argv[]) {
 	if (argc == 1) {
-		display_help();
+		HELP();
 		return 0;
 	}
 	for (int i = 1; i < argc; i++) {
