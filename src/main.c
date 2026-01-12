@@ -8,7 +8,6 @@
 #include <unistd.h>
 
 static bool truncate_flag = false;
-int b[5];
 
 void evaluate_options(char *argv[], int i) {
 	if (*argv[i] == '-') {
