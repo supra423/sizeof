@@ -16,10 +16,15 @@ dir/bar.c IN BYTES: 1234B
 dir/bar.c IN KiB: 1.23KiB
 ```
 
+The program can also accept directories which just calculates the total bytes
+for each file inside the directory, the output for each files are a lot shorter
+though, this is similar to using:
+
+```bash
+$ du --si foo/
+```
+
 For more info, enter:
 ```bash 
 $ sizeof --help
 ```
-
-The makefile compiles the program with debug flags by default, uncomment the
-"CFLAGS" you want to use.
