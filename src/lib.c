@@ -152,11 +152,6 @@ void process_output(char *file_name, double size, int truncate_flag,
 
 	if (is_dir) {
 		display_file_output_lesser(final_file_name, size);
-
-		struct stat buf;
-
-		lstat(file_name, &buf);
-		printf("%d\n", buf.st_mode);
 		if (is_mallocd)
 			free(final_file_name);
 		return;
