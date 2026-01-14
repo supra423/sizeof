@@ -52,21 +52,21 @@ int evaluate_st_mode(struct stat buf, char *file_name) {
 	return 0;
 }
 
-void display_file_output_full(char *final_file_name, double size) {
+void display_file_output_full(char *final_file_name, size_t size) {
 	printf("\nFILE: %s\n", final_file_name);
 	if (size <= BYTES_IN_KIB) {
-		printf("%s IN BYTES: %.0fB\n", final_file_name, size);
+		printf("%s IN BYTES: %zuB\n", final_file_name, size);
 	} else if (size <= BYTES_IN_MIB) {
 		const double size_in_kib = size / BYTES_IN_KIB;
 
-		printf("%s IN BYTES: %.0fB\n"
+		printf("%s IN BYTES: %zuB\n"
 			   "%s IN KiB: %.2fKiB\n",
 			   final_file_name, size, final_file_name, size_in_kib);
 	} else if (size <= BYTES_IN_GIB) {
 		const double size_in_kib = size / BYTES_IN_KIB;
 		const double size_in_mib = size / BYTES_IN_MIB;
 
-		printf("%s IN BYTES: %.0fB\n"
+		printf("%s IN BYTES: %zuB\n"
 			   "%s IN KiB: %.2fKiB\n"
 			   "%s IN MiB: %.2fMiB\n",
 			   final_file_name, size, final_file_name, size_in_kib,
@@ -76,7 +76,7 @@ void display_file_output_full(char *final_file_name, double size) {
 		const double size_in_mib = size / BYTES_IN_MIB;
 		const double size_in_gib = size / BYTES_IN_GIB;
 
-		printf("%s IN BYTES: %.0fB\n"
+		printf("%s IN BYTES: %zuB\n"
 			   "%s IN KiB: %.2fKiB\n"
 			   "%s IN MiB: %.2fMiB\n"
 			   "%s IN GiB: %.2fGiB\n",
@@ -85,21 +85,21 @@ void display_file_output_full(char *final_file_name, double size) {
 	}
 }
 
-void display_dir_output(char *final_file_name, double size) {
+void display_dir_output(char *final_file_name, size_t size) {
 	printf("\nDIRECTORY: %s\n", final_file_name);
 	if (size <= BYTES_IN_KIB) {
-		printf("%s IN BYTES: %.0fB\n", final_file_name, size);
+		printf("%s IN BYTES: %zuB\n", final_file_name, size);
 	} else if (size <= BYTES_IN_MIB) {
 		const double size_in_kib = size / BYTES_IN_KIB;
 
-		printf("%s IN BYTES: %.0fB\n"
+		printf("%s IN BYTES: %zuB\n"
 			   "%s IN KiB: %.2fKiB\n",
 			   final_file_name, size, final_file_name, size_in_kib);
 	} else if (size <= BYTES_IN_GIB) {
 		const double size_in_kib = size / BYTES_IN_KIB;
 		const double size_in_mib = size / BYTES_IN_MIB;
 
-		printf("%s IN BYTES: %.0fB\n"
+		printf("%s IN BYTES: %zuB\n"
 			   "%s IN KiB: %.2fKiB\n"
 			   "%s IN MiB: %.2fMiB\n",
 			   final_file_name, size, final_file_name, size_in_kib,
@@ -109,7 +109,7 @@ void display_dir_output(char *final_file_name, double size) {
 		const double size_in_mib = size / BYTES_IN_MIB;
 		const double size_in_gib = size / BYTES_IN_GIB;
 
-		printf("%s IN BYTES: %.0fB\n"
+		printf("%s IN BYTES: %zuB\n"
 			   "%s IN KiB: %.2fKiB\n"
 			   "%s IN MiB: %.2fMiB\n"
 			   "%s IN GiB: %.2fGiB\n",
@@ -118,9 +118,9 @@ void display_dir_output(char *final_file_name, double size) {
 	}
 }
 
-void display_file_output_lesser(char *final_file_name, double size) {
+void display_file_output_lesser(char *final_file_name, size_t size) {
 	if (size <= BYTES_IN_KIB) {
-		printf("%s IN BYTES: %.0fB\n", final_file_name, size);
+		printf("%s IN BYTES: %zuB\n", final_file_name, size);
 	} else if (size <= BYTES_IN_MIB) {
 		const double size_in_kib = size / BYTES_IN_KIB;
 
@@ -136,7 +136,7 @@ void display_file_output_lesser(char *final_file_name, double size) {
 	}
 }
 
-void process_output(char *file_name, double size, int truncate_flag,
+void process_output(char *file_name, size_t size, int truncate_flag,
 					int is_dir) {
 	int is_mallocd = 0;
 	char *final_file_name;

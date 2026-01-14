@@ -1,9 +1,9 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define BYTES_IN_KIB 1024
-#define BYTES_IN_MIB 1048576
-#define BYTES_IN_GIB 1073741824
+#define BYTES_IN_KIB 1024.00
+#define BYTES_IN_MIB 1048576.00
+#define BYTES_IN_GIB 1073741824.00
 
 #define HELP()                                                                 \
 	{                                                                          \

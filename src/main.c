@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 static int truncate_flag = 0;
-double total_bytes = 0.0;
+static volatile size_t total_bytes = 0.0;
 
 void evaluate_options(char *argv[], int i) {
 	// if argument is prefixed with '-' it might be an option
@@ -33,8 +33,25 @@ void process_file(char *file_name, int truncate_flag, int is_dir) {
 	struct stat buf;
 	lstat(file_name, &buf);
 
-	if (access(file_name, F_OK) != 0 && buf.st_size <= 0) {
-		printf("FILE: \"%s\" doesn't exist, check for typos!\n", file_name);
+	if (access(file_name, F_OK) != 0) {
+		printf("FILE/DIRECTORY: \"%s\" doesn't exist, check for typos!\n",
+			   file_name);
+		return;
+	}
+
+	if (buf.st_size <= 0) {
+		printf("FILE/DIRECTORY: \"%s\" size in bytes not detected!\n"
+			   "This usually happens when you are reading files from /proc "
+			   "directory\n",
+			   file_name);
+		return;
+	}
+
+	if (buf.st_blocks <= 0) {
+		printf("FILE/DIRECTORY: \"%s\" amount of blocks not detected!\n"
+			   "This usually happens when you are reading files from /proc "
+			   "directory\n",
+			   file_name);
 		return;
 	}
 
@@ -54,6 +71,7 @@ void process_file(char *file_name, int truncate_flag, int is_dir) {
 				struct stat inner_buf;
 				lstat(temp_concat, &inner_buf);
 				if (S_ISLNK(inner_buf.st_mode) == 1) {
+					free(temp_concat);
 					continue;
 				}
 				char *concat_dir_to_file_name = concat(file_name, "/");
@@ -69,10 +87,10 @@ void process_file(char *file_name, int truncate_flag, int is_dir) {
 		return;
 	}
 	// st_size stores file size in bytes defined in sys/stat.h
-	const double size = buf.st_size;
+	const size_t size = buf.st_size;
 	total_bytes += size;
 
-	if (size != 1) {
+	if (size >= 1) {
 		process_output(file_name, size, truncate_flag, is_dir);
 	}
 	return;
@@ -107,6 +125,7 @@ int process_args(int argc, char *argv[]) {
 		}
 
 		process_file(file_name, truncate_flag, is_dir);
+
 		if (is_dir) {
 			display_dir_output(argv[i], total_bytes);
 			total_bytes = 0.0;
