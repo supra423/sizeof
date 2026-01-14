@@ -41,16 +41,16 @@ void process_file(char *file_name, int truncate_flag, int is_dir) {
 
 	if (buf.st_size <= 0) {
 		printf("FILE/DIRECTORY: \"%s\" size in bytes not detected!\n"
-			   "This usually happens when you are reading files from /proc "
-			   "directory\n",
+			   "This usually happens when you are reading files from "
+			   "directories like  /proc or others in the / directory\n",
 			   file_name);
 		return;
 	}
 
 	if (buf.st_blocks <= 0) {
 		printf("FILE/DIRECTORY: \"%s\" amount of blocks not detected!\n"
-			   "This usually happens when you are reading files from /proc "
-			   "directory\n",
+			   "This usually happens when you are reading files from "
+			   "directories like  /proc or others in the / directory\n",
 			   file_name);
 		return;
 	}

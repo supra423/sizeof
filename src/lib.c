@@ -1,4 +1,3 @@
-#include "lib.h"
 #include "constants.h"
 #include <dirent.h>
 #include <stdio.h>
