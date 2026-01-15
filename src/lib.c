@@ -1,10 +1,79 @@
+#include "lib.h"
+#include "arena.h"
 #include "constants.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+static inline char *concat(const char *s1, const char *s2, arena_t *arena_) {
+	if (arena_ == NULL) {
+		free(arena_);
+		exit(1);
+	}
+	char *new_string = arena_alloc(arena_, strlen(s1) + strlen(s2) + 1);
+	strcpy(new_string, s1);
+	strcat(new_string, s2);
+	return new_string;
+}
+
+static inline void handle_dir(char *file_name, struct stat *buf) {
+	arena_t arena_;
+	arena_init(&arena_, 512);
+	DIR *dir = opendir(file_name);
+	if (dir == NULL) {
+		arena_free(&arena_);
+		return;
+	}
+	struct dirent *dir_ent;
+	while ((dir_ent = readdir(dir))) {
+		if (strcmp(dir_ent->d_name, ".") != 0 &&
+			strcmp(dir_ent->d_name, "..") != 0) {
+			char *concat_file_name_slash = concat(file_name, "/", &arena_);
+			char *concat_path =
+				concat(concat_file_name_slash, dir_ent->d_name, &arena_);
+			process_file(concat_path, buf);
+			arena_reset(&arena_);
+		}
+	}
+	closedir(dir);
+	arena_free(&arena_);
+}
+
+static inline int file_is_valid(char *file_name, size_t size, size_t blocks) {
+	if (access(file_name, F_OK) != 0) {
+		printf("FILE/DIRECTORY: \"%s\" doesn't exist, check for typos!\n",
+			   file_name);
+		return 1;
+	}
+	if (size <= 0) {
+		printf("FILE/DIRECTORY: \"%s\" size in bytes not detected!\n"
+			   "This usually happens when you are reading files from "
+			   "directories like  /proc or others in the / directory\n",
+			   file_name);
+		return 1;
+	}
+	if (blocks <= 0) {
+		printf("FILE/DIRECTORY: \"%s\" amount of blocks not detected!\n"
+			   "This usually happens when you are reading files from "
+			   "directories like  /proc or others in the / directory\n",
+			   file_name);
+		return 1;
+	}
+	return 0;
+}
+
+static inline int evaluate_st_mode(struct stat *buf, char *file_name) {
+	if (S_ISREG(buf->st_mode) != 0 && S_ISDIR(buf->st_mode) != 0 &&
+		S_ISLNK(buf->st_mode) != 0) {
+		printf("File: \"%s\" file type is not recognized!\n", file_name);
+		return 1;
+	}
+	return 0;
+}
 
 char *truncate_file_name(char file_name[]) {
 	int c = 0;
@@ -40,15 +109,6 @@ char *truncate_file_name(char file_name[]) {
 	}
 	new_str[new_str_size] = '\0';
 	return new_str;
-}
-
-int evaluate_st_mode(struct stat buf, char *file_name) {
-	if (S_ISREG(buf.st_mode) != 0 && S_ISDIR(buf.st_mode) != 0 &&
-		S_ISLNK(buf.st_mode) != 0) {
-		printf("File: \"%s\" file type is not recognized!\n", file_name);
-		return 1;
-	}
-	return 0;
 }
 
 void display_file_output_full(char *final_file_name, size_t size) {
@@ -135,8 +195,7 @@ void display_file_output_lesser(char *final_file_name, size_t size) {
 	}
 }
 
-void process_output(char *file_name, size_t size, int truncate_flag,
-					int is_dir) {
+void process_output(char *file_name, size_t size) {
 	int is_mallocd = 0;
 	char *final_file_name;
 	if (truncate_flag) {
@@ -161,12 +220,32 @@ void process_output(char *file_name, size_t size, int truncate_flag,
 		free(final_file_name);
 }
 
-char *concat(const char *s1, const char *s2) {
-	char *result = malloc(strlen(s1) + strlen(s2) + 1);
-	if (result == NULL) {
-		exit(1);
+void remove_last_slash(char *file_name) {
+	// if command line arg looks like "dir/"
+	int c = strlen(file_name);
+	if (file_name[c - 1] == '/' && c > 1)
+		file_name[c - 1] = '\0';
+}
+void process_file(char *file_name, struct stat *buf) {
+	lstat(file_name, buf);
+
+	if (file_is_valid(file_name, buf->st_size, buf->st_blocks) == 1) {
+		return;
 	}
-	strcpy(result, s1);
-	strcat(result, s2);
-	return result;
+
+	if (evaluate_st_mode(buf, file_name) == 1)
+		return;
+
+	if (S_ISDIR(buf->st_mode) == 1) {
+		handle_dir(file_name, buf);
+		return;
+	}
+	// st_size stores file size in bytes defined in sys/stat.h
+	const size_t size = buf->st_size;
+	total_bytes += size;
+
+	if (size >= 1) {
+		process_output(file_name, size);
+	}
+	return;
 }

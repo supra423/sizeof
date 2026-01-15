@@ -18,9 +18,9 @@ BIN_DIR_MAX := bin/max
 CC := gcc
 
 # flags
-CFLAGS_DEBUG := -Iinclude -Wall -Wextra -g
-CFLAGS_RELEASE := -Iinclude -O2 -Wall -Wextra -pipe
-CFLAGS_MAX := -Iinclude -march=native -mtune=native -Wall -Wextra -O2 -fomit-frame-pointer \
+CFLAGS_DEBUG := -Iinclude -Wall -Wextra -Winline -g
+CFLAGS_RELEASE := -Iinclude -O2 -pipe
+CFLAGS_MAX := -Iinclude -O2 -march=native -mtune=native -fomit-frame-pointer \
    -fno-plt -pipe
 
 LDFLAGS_DEBUG := 
