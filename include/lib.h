@@ -43,27 +43,6 @@ extern bool is_dir;
 		   "to happen though because who the hell names files/directories\n"   \
 		   "prefixed with a '-'.\n");
 
-static inline void evaluate_options(char *argv[], int i) {
-	// if argument is prefixed with '-' it might be an option
-	if (*argv[i] == '-') {
-		if (argv[i] == NULL || strcmp(argv[i], "--help") == 0 ||
-			strcmp(argv[i], "-h") == 0) {
-			HELP();
-			exit(0);
-		} else if (strcmp(argv[i], "--truncate-filename") == 0 ||
-				   strcmp(argv[i], "-tf") == 0) {
-			truncate_flag = 1;
-		} else if ((strcmp(argv[i], "--silent") == 0 ||
-					strcmp(argv[i], "-s") == 0) &&
-				   is_dir == true) {
-			silent_flag = 1;
-		} else {
-			printf("\"%s\" option doesn't exist, check for typos!\n", argv[i]);
-			exit(1);
-		}
-	}
-}
-
 void process_output(char *file_name, size_t size, arena_t *arena);
 
 // // displays varying output depending on file size, if file size
