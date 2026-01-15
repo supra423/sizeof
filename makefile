@@ -1,8 +1,10 @@
 # source files
 SRC_DIR := src
 
-# output dirs
+# change if you want a different binary name
+FINAL_BIN_NAME := sizeof
 
+# output dirs
 OBJ_DIR := obj
 BIN_DIR := bin
 
@@ -36,9 +38,9 @@ OBJS_DEBUG := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR_DEBUG)/%.o, $(SRCS))
 OBJS_RELEASE := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR_RELEASE)/%.o, $(SRCS))
 OBJS_MAX := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR_MAX)/%.o, $(SRCS))
 
-TARGET_DEBUG := $(BIN_DIR_DEBUG)/sizeof
-TARGET_RELEASE := $(BIN_DIR_RELEASE)/sizeof
-TARGET_MAX := $(BIN_DIR_MAX)/sizeof
+TARGET_DEBUG := $(BIN_DIR_DEBUG)/$(FINAL_BIN_NAME)
+TARGET_RELEASE := $(BIN_DIR_RELEASE)/$(FINAL_BIN_NAME)
+TARGET_MAX := $(BIN_DIR_MAX)/$(FINAL_BIN_NAME)
 
 all: debug release max
 
