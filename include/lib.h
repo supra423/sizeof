@@ -11,6 +11,7 @@
 
 extern size_t total_bytes;
 extern bool truncate_flag;
+extern bool silent_flag;
 extern bool is_dir;
 
 #define HELP()                                                                 \
@@ -32,8 +33,9 @@ extern bool is_dir;
 		   "OPTIONS:\n"                                                        \
 		   "\n\"--help / -h\" - to display this message\n"                     \
 		   "\n\"--truncate-filename / -tf\" - to truncate file name, e.g.,\n"  \
-		   "\t\"dir/bar.c\" to \"bar.c\" only.\n\n"                            \
-		   "WARNING:\n\nMake sure that the arguments you enter that are\n"     \
+		   "\t\"dir/bar.c\" to \"bar.c\" only.\n"                              \
+		   "\n\"--silent / -s\" - to only output total size of a directory\n"  \
+		   "\nWARNING:\n\nMake sure that the arguments you enter that are\n"   \
 		   "intended to be used as a file name or path don't start with: "     \
 		   "'-'\n"                                                             \
 		   "the program will misinterpret it as an option. It's pretty "       \
@@ -51,6 +53,10 @@ static inline void evaluate_options(char *argv[], int i) {
 		} else if (strcmp(argv[i], "--truncate-filename") == 0 ||
 				   strcmp(argv[i], "-tf") == 0) {
 			truncate_flag = 1;
+		} else if ((strcmp(argv[i], "--silent") == 0 ||
+					strcmp(argv[i], "-s") == 0) &&
+				   is_dir == true) {
+			silent_flag = 1;
 		} else {
 			printf("\"%s\" option doesn't exist, check for typos!\n", argv[i]);
 			exit(1);
@@ -58,7 +64,7 @@ static inline void evaluate_options(char *argv[], int i) {
 	}
 }
 
-void process_output(char *file_name, size_t size);
+void process_output(char *file_name, size_t size, arena_t *arena);
 
 // // displays varying output depending on file size, if file size
 // // is lesser than a KiB, it should only display size in bytes, or if

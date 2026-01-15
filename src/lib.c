@@ -9,58 +9,63 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-static inline char *concat(const char *s1, const char *s2, arena_t *arena_) {
-	if (arena_ == NULL) {
-		free(arena_);
+static inline char *concat(const char *s1, const char *s2, arena_t *arena) {
+	if (arena == NULL) {
+		free(arena);
 		exit(1);
 	}
-	char *new_string = arena_alloc(arena_, strlen(s1) + strlen(s2) + 1);
+	char *new_string = arena_alloc(arena, strlen(s1) + strlen(s2) + 1);
 	strcpy(new_string, s1);
 	strcat(new_string, s2);
 	return new_string;
 }
 
-static inline void handle_dir(char *file_name, struct stat *buf) {
-	arena_t arena_;
-	arena_init(&arena_, 512);
+static inline void handle_dir(char *file_name, struct stat *buf,
+							  arena_t *arena) {
 	DIR *dir = opendir(file_name);
 	if (dir == NULL) {
-		arena_free(&arena_);
+		// arena_free(arena);
 		return;
 	}
 	struct dirent *dir_ent;
 	while ((dir_ent = readdir(dir))) {
 		if (strcmp(dir_ent->d_name, ".") != 0 &&
 			strcmp(dir_ent->d_name, "..") != 0) {
-			char *concat_file_name_slash = concat(file_name, "/", &arena_);
+			char *concat_file_name_slash = concat(file_name, "/", arena);
 			char *concat_path =
-				concat(concat_file_name_slash, dir_ent->d_name, &arena_);
+				concat(concat_file_name_slash, dir_ent->d_name, arena);
 			process_file(concat_path, buf);
-			arena_reset(&arena_);
+			arena_reset(arena);
 		}
 	}
 	closedir(dir);
-	arena_free(&arena_);
+	// arena_free(arena);
 }
 
 static inline int file_is_valid(char *file_name, size_t size, size_t blocks) {
 	if (access(file_name, F_OK) != 0) {
-		printf("FILE/DIRECTORY: \"%s\" doesn't exist, check for typos!\n",
-			   file_name);
+		if (silent_flag == false) {
+			printf("FILE/DIRECTORY: \"%s\" doesn't exist, check for typos!\n",
+				   file_name);
+		}
 		return 1;
 	}
 	if (size <= 0) {
-		printf("FILE/DIRECTORY: \"%s\" size in bytes not detected!\n"
-			   "This usually happens when you are reading files from "
-			   "directories like  /proc or others in the / directory\n",
-			   file_name);
+		if (silent_flag == false) {
+			printf("FILE/DIRECTORY: \"%s\" size in bytes not detected!\n"
+				   "This usually happens when you are reading files from "
+				   "directories like  /proc or others in the / directory\n",
+				   file_name);
+		}
 		return 1;
 	}
 	if (blocks <= 0) {
-		printf("FILE/DIRECTORY: \"%s\" amount of blocks not detected!\n"
-			   "This usually happens when you are reading files from "
-			   "directories like  /proc or others in the / directory\n",
-			   file_name);
+		if (silent_flag == false) {
+			printf("FILE/DIRECTORY: \"%s\" amount of blocks not detected!\n"
+				   "This usually happens when you are reading files from "
+				   "directories like  /proc or others in the / directory\n",
+				   file_name);
+		}
 		return 1;
 	}
 	return 0;
@@ -75,7 +80,7 @@ static inline int evaluate_st_mode(struct stat *buf, char *file_name) {
 	return 0;
 }
 
-char *truncate_file_name(char file_name[]) {
+char *truncate_file_name(char file_name[], arena_t *arena) {
 	int c = 0;
 	int contains_dir = 0;
 	while (file_name[c] != '\0') {
@@ -103,7 +108,7 @@ char *truncate_file_name(char file_name[]) {
 		new_str_size++;
 	}
 
-	char *new_str = malloc(new_str_size + 1); // + 1 for the '\0'
+	char *new_str = arena_alloc(arena, new_str_size + 1); // + 1 for the '\0'
 	for (int i = 0; i < new_str_size; i++) {
 		new_str[i] = file_name[i + idx_of_last_slash + 1];
 	}
@@ -195,29 +200,21 @@ void display_file_output_lesser(char *final_file_name, size_t size) {
 	}
 }
 
-void process_output(char *file_name, size_t size) {
-	int is_mallocd = 0;
+void process_output(char *file_name, size_t size, arena_t *arena) {
 	char *final_file_name;
 	if (truncate_flag) {
-		final_file_name = truncate_file_name(file_name);
-		is_mallocd = 1;
+		final_file_name = truncate_file_name(file_name, arena);
 		if (final_file_name == NULL) {
 			final_file_name = file_name;
-			is_mallocd = 0;
 		}
 	} else
 		final_file_name = file_name;
 
 	if (is_dir) {
 		display_file_output_lesser(final_file_name, size);
-		if (is_mallocd)
-			free(final_file_name);
 		return;
 	} else
 		display_file_output_full(final_file_name, size);
-
-	if (is_mallocd)
-		free(final_file_name);
 }
 
 void remove_last_slash(char *file_name) {
@@ -227,25 +224,32 @@ void remove_last_slash(char *file_name) {
 		file_name[c - 1] = '\0';
 }
 void process_file(char *file_name, struct stat *buf) {
+	arena_t arena;
+	arena_init(&arena, 512);
 	lstat(file_name, buf);
 
 	if (file_is_valid(file_name, buf->st_size, buf->st_blocks) == 1) {
+		arena_free(&arena);
 		return;
 	}
 
-	if (evaluate_st_mode(buf, file_name) == 1)
+	if (evaluate_st_mode(buf, file_name) == 1) {
+		arena_free(&arena);
 		return;
+	}
 
 	if (S_ISDIR(buf->st_mode) == 1) {
-		handle_dir(file_name, buf);
+		handle_dir(file_name, buf, &arena);
+		arena_free(&arena);
 		return;
 	}
 	// st_size stores file size in bytes defined in sys/stat.h
 	const size_t size = buf->st_size;
 	total_bytes += size;
 
-	if (size >= 1) {
-		process_output(file_name, size);
+	if (size >= 1 && silent_flag == false) {
+		process_output(file_name, size, &arena);
 	}
+	arena_free(&arena);
 	return;
 }

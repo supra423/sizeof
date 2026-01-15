@@ -9,8 +9,9 @@
 #include <unistd.h>
 
 size_t total_bytes = 0;
-bool truncate_flag = 0;
-bool is_dir = 0;
+bool truncate_flag = false;
+bool silent_flag = false;
+bool is_dir = true;
 
 static inline int process_args(int argc, char *argv[]) {
 	for (int i = 1; i < argc; i++) {
@@ -28,8 +29,12 @@ static inline int process_args(int argc, char *argv[]) {
 		lstat(file_name, &buf);
 
 		if (S_ISDIR(buf.st_mode)) {
-			is_dir = 1;
+			// is_dir = 1;
+			is_dir = true;
 			remove_last_slash(file_name);
+		} else {
+			silent_flag = false;
+			is_dir = false;
 		}
 
 		process_file(file_name, &buf);
