@@ -53,7 +53,7 @@ compile the program using make, there are different options, you can use either:
 make debug # compile with debug flags
 make release # compile with moderate opimization (O2, etc)
 make max # compile with more aggressive opimization (02, march=native, mtune=native, etc)
-make # to all compile 3 different binaries
+make # to compile all 3 different binaries
 ```
 choose the binary to put into /usr/bin/ directory to turn it into a command, if you want the max optimization binary, you can do:
 ```bash
