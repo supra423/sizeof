@@ -18,7 +18,7 @@ char *arena_alloc(arena_t *arena, size_t bytes) {
 			new_size *= 2;
 		char *new_buf = realloc(arena->buf, new_size);
 		if (!new_buf) {
-			free(arena);
+			free(arena->buf);
 			exit(1);
 		}
 		arena->buf = new_buf;

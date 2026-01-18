@@ -24,7 +24,6 @@ static inline void handle_dir(char *file_name, struct stat *buf,
 							  arena_t *arena) {
 	DIR *dir = opendir(file_name);
 	if (dir == NULL) {
-		// arena_free(arena);
 		return;
 	}
 	struct dirent *dir_ent;
@@ -39,7 +38,6 @@ static inline void handle_dir(char *file_name, struct stat *buf,
 		}
 	}
 	closedir(dir);
-	// arena_free(arena);
 }
 
 static inline int file_is_valid(char *file_name, size_t size, size_t blocks) {
@@ -225,7 +223,7 @@ void remove_last_slash(char *file_name) {
 }
 void process_file(char *file_name, struct stat *buf) {
 	arena_t arena;
-	arena_init(&arena, 512);
+	arena_init(&arena, 2048);
 	lstat(file_name, buf);
 
 	if (file_is_valid(file_name, buf->st_size, buf->st_blocks) == 1) {
