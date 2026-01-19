@@ -11,7 +11,7 @@
 
 static inline char *concat(const char *s1, const char *s2, arena_t *arena) {
 	if (arena == NULL) {
-		free(arena);
+		arena_free(arena);
 		exit(1);
 	}
 	char *new_string = arena_alloc(arena, strlen(s1) + strlen(s2) + 1);
