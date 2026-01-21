@@ -9,19 +9,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-static inline char *concat(const char *s1, const char *s2, arena_t *arena) {
-	if (arena == NULL) {
-		arena_free(arena);
-		exit(1);
-	}
-	char *new_string = arena_alloc(arena, strlen(s1) + strlen(s2) + 1);
-	strcpy(new_string, s1);
-	strcat(new_string, s2);
-	return new_string;
-}
-
 static inline void handle_dir(char *file_name, struct stat *buf,
 							  arena_t *arena) {
+	// char path_buf[PATH_MAX];
+	arena_alloc(arena, PATH_MAX);
 	DIR *dir = opendir(file_name);
 	if (dir == NULL) {
 		return;
@@ -30,11 +21,8 @@ static inline void handle_dir(char *file_name, struct stat *buf,
 	while ((dir_ent = readdir(dir))) {
 		if (strcmp(dir_ent->d_name, ".") != 0 &&
 			strcmp(dir_ent->d_name, "..") != 0) {
-			char *concat_file_name_slash = concat(file_name, "/", arena);
-			char *concat_path =
-				concat(concat_file_name_slash, dir_ent->d_name, arena);
-			process_file(concat_path, buf);
-			arena_reset(arena);
+			snprintf(arena->buf, PATH_MAX, "%s/%s", file_name, dir_ent->d_name);
+			process_file(arena->buf, buf);
 		}
 	}
 	closedir(dir);
@@ -224,7 +212,7 @@ void remove_last_slash(char *file_name) {
 
 void process_file(char *file_name, struct stat *buf) {
 	arena_t arena;
-	arena_init(&arena, INITIAL_ARENA_SIZE);
+	arena_init(&arena, PATH_MAX);
 	lstat(file_name, buf);
 
 	if (file_is_valid(file_name, buf->st_size, buf->st_blocks) == 1) {
