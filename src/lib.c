@@ -221,9 +221,10 @@ void remove_last_slash(char *file_name) {
 	if (file_name[c - 1] == '/' && c > 1)
 		file_name[c - 1] = '\0';
 }
+
 void process_file(char *file_name, struct stat *buf) {
 	arena_t arena;
-	arena_init(&arena, 2048);
+	arena_init(&arena, INITIAL_ARENA_SIZE);
 	lstat(file_name, buf);
 
 	if (file_is_valid(file_name, buf->st_size, buf->st_blocks) == 1) {
@@ -241,12 +242,12 @@ void process_file(char *file_name, struct stat *buf) {
 		arena_free(&arena);
 		return;
 	}
-	// st_size stores file size in bytes defined in sys/stat.h
-	const size_t size = buf->st_size;
-	total_bytes += size;
 
-	if (size >= 1 && silent_flag == false) {
-		process_output(file_name, size, &arena);
+	// st_size stores file size in bytes defined in sys/stat.h
+	total_bytes += buf->st_size;
+
+	if (buf->st_size >= 1 && silent_flag == false) {
+		process_output(file_name, buf->st_size, &arena);
 	}
 	arena_free(&arena);
 	return;
