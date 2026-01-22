@@ -50,7 +50,6 @@ void process_output(char *file_name, size_t size, arena_t *arena);
 // // the file size is greater than a GiB, it should display all sizes in
 // // bytes, KiB, MiB, GiB
 void display_dir_output(char *final_file_name, size_t size);
-void remove_last_slash(char *file_name);
 void process_file(char *file_name, struct stat *buf);
 
 #endif

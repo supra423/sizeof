@@ -50,9 +50,11 @@ static inline int process_args(int argc, char *argv[]) {
 		lstat(file_name, &buf);
 
 		if (S_ISDIR(buf.st_mode)) {
-			// is_dir = 1;
 			is_dir = true;
-			remove_last_slash(file_name);
+			total_bytes = 0;
+			if (file_name[strlen(file_name) - 1] == '/' &&
+				strlen(file_name) > 1)
+				file_name[strlen(file_name) - 1] = '\0';
 		} else {
 			silent_flag = false;
 			is_dir = false;
@@ -62,7 +64,6 @@ static inline int process_args(int argc, char *argv[]) {
 
 		if (is_dir) {
 			display_dir_output(argv[i], total_bytes);
-			total_bytes = 0.0;
 		}
 	}
 	return 0;

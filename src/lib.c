@@ -11,7 +11,6 @@
 
 static inline void handle_dir(char *file_name, struct stat *buf,
 							  arena_t *arena) {
-	// char path_buf[PATH_MAX];
 	arena_alloc(arena, PATH_MAX);
 	DIR *dir = opendir(file_name);
 	if (dir == NULL) {
@@ -170,7 +169,7 @@ void display_dir_output(char *final_file_name, size_t size) {
 
 void display_file_output_lesser(char *final_file_name, size_t size) {
 	if (size <= BYTES_IN_KIB) {
-		printf("%s IN BYTES: %zuB\n", final_file_name, size);
+		printf("\n%s IN BYTES: %zuB\n", final_file_name, size);
 	} else if (size <= BYTES_IN_MIB) {
 		const double size_in_kib = size / BYTES_IN_KIB;
 
