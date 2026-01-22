@@ -1,6 +1,5 @@
 #ifndef LIB_H
 #define LIB_H
-#include <arena.h>
 #include <dirent.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -42,8 +41,6 @@ extern bool is_dir;
 		   "unlikely\n"                                                        \
 		   "to happen though because who the hell names files/directories\n"   \
 		   "prefixed with a '-'.\n");
-
-void process_output(char *file_name, size_t size, arena_t *arena);
 
 // // displays varying output depending on file size, if file size
 // // is lesser than a KiB, it should only display size in bytes, or if
