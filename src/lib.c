@@ -202,13 +202,6 @@ void process_output(char *file_name, size_t size, arena_t *arena) {
 		display_file_output_full(final_file_name, size);
 }
 
-void remove_last_slash(char *file_name) {
-	// if command line arg looks like "dir/"
-	int c = strlen(file_name);
-	if (file_name[c - 1] == '/' && c > 1)
-		file_name[c - 1] = '\0';
-}
-
 void process_file(char *file_name, struct stat *buf) {
 	arena_t arena;
 	arena_init(&arena, PATH_MAX);

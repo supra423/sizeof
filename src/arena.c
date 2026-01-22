@@ -1,6 +1,7 @@
 #include "arena.h"
 #include <stdio.h>
 #include <stdlib.h>
+
 void arena_init(arena_t *arena, size_t initial_size) {
 	arena->buf = malloc(initial_size);
 	if (!arena->buf) {
