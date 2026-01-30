@@ -34,6 +34,8 @@ extern bool is_dir;
 		   "\n\"--truncate-filename / -tf\" - to truncate file name, e.g.,\n"  \
 		   "\t\"dir/bar.c\" to \"bar.c\" only.\n"                              \
 		   "\n\"--silent / -s\" - to only output total size of a directory\n"  \
+		   "you can use this option to improve speed when reading huge\n"      \
+		   "directories like the / directory or ~\n"                           \
 		   "\nWARNING:\n\nMake sure that the arguments you enter that are\n"   \
 		   "intended to be used as a file name or path don't start with: "     \
 		   "'-'\n"                                                             \

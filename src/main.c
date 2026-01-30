@@ -1,12 +1,4 @@
 #include "lib.h"
-#include <dirent.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 size_t total_bytes = 0;
 bool truncate_flag = false;

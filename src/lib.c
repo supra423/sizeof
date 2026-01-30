@@ -1,12 +1,5 @@
 #include "lib.h"
 #include "constants.h"
-#include <dirent.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 static inline void handle_dir(char *file_name, struct stat *buf,
 							  char *file_name_buf) {
@@ -93,7 +86,6 @@ char *truncate_file_name(char file_name[], char *file_name_buf) {
 	}
 
 	char *new_str = file_name_buf;
-	// arena_alloc(file_name_buf, new_str_size + 1); // + 1 for the '\0'
 	for (int i = 0; i < new_str_size; i++) {
 		new_str[i] = file_name[i + idx_of_last_slash + 1];
 	}
